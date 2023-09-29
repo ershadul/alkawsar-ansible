@@ -1,0 +1,17 @@
+---
+env: dev
+system_user: alkawsar
+app_name: alkawsar
+python_version: python
+virtualenv_python: python3
+git_repo: git@github.com:ershadul/alkawsarcms.git
+git_branch: master
+virtualenv_path:  "/home/{{ system_user }}/env"
+app_path: "/home/{{ system_user }}/{{ app_name }}"
+django_manage_path: "{{ app_path }}"
+wsgi_module: alkawsarcms.wsgi:application
+ansible_user: ubuntu
+ansible_python_interpreter: /usr/bin/python3
+ansible_ssh_private_key_file: ~/.ssh/aws-lightsail-ap-southeast-1.pem
+gunicorn_workers: 2
+

@@ -1,0 +1,14 @@
+# {{ app_name }} wsgi ini file
+[uwsgi]
+# master
+# master         = true
+uid={{ system_user }}
+processes        = 4
+socket           = /tmp/uwsgi-{{ app_name }}.sock
+chmod-socket     = 666
+chdir            = {{ django_manage_path }}
+home       = {{ virtualenv_path }}
+module           = {{ wsgi_module }}
+vacuum           = true
+req-logger       = file:/var/log/django-{{ app_name }}-req.log
+logger           = file:/var/log/django-{{ app_name }}.log

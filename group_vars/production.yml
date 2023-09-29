@@ -1,0 +1,14 @@
+---
+env: production
+git_branch: master
+db_user: "*****"
+db_password: "*****"
+db_name: alkawsar_db
+db_host: localhost
+ansible_user: ubuntu
+ansible_python_interpreter: /usr/bin/python3
+ansible_ssh_private_key_file: ~/.ssh/aws-lightsail-ap-southeast-1.pem
+python_version: python3
+virtualenv_python: python3
+ssl_cert_domain: www.alkawsar.com,alkawsar
+gunicorn_workers: 10

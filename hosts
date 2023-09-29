@@ -1,0 +1,20 @@
+# alkawsar
+[staging]
+staging.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-staging.cer
+
+[production]
+www.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-website-prod.cer
+
+# nari
+[nari_prod]
+nari.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-website-prod.cer
+
+[nari_staging]
+nari-staging.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-staging.cer
+
+# shishu
+[shishu_staging]
+shishu-staging.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-staging.cer
+
+[shishu_prod]
+shishu.alkawsar.com ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/alkawsar-website-prod.cer

@@ -1,0 +1,60 @@
+from .settings import *
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['nari.alkawsar.com']
+
+DB_NAME = '{{ db_name }}'
+DB_USER = '{{ db_user }}'
+DB_PASSWORD = '{{ db_password }}'
+DB_HOST = '{{ db_host }}'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': '3306',
+    }
+}
+
+ADMINS = []
+
+# STATIC_URL = 'http://static.alkawsar.com/static/'
+# MEDIA_URL = 'http://media.alkawsar.com/media/'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://localhost:9200/',
+        'INDEX_NAME': 'nari',
+        'BATCH_SIZE': 25,
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/home/{{ system_user }}/.{{ app_name }}',
+    }
+}
+
+# APIs
+# Google Maps
+DJANGOCMS_GOOGLEMAP_API_KEY = ''
+
+# Google Re-captcha
+RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PRIVATE_KEY = ''
+NOCAPTCHA = True
+
+# SendGrid
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+
+SITE_NAME = 'nari'

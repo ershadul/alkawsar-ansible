@@ -1,0 +1,33 @@
+---
+- name: Apt cache update
+  apt: update_cache=yes
+
+- name: Install packages
+  apt: name={{ item }} state=present
+  with_items:
+    - certbot
+    - python3-certbot-nginx 
+
+- name: check if Nginx exists
+  stat: path=/etc/init.d/nginx
+  register: nginx_status
+
+- name: ensure Nginx is stopped
+  service: name=nginx state=stopped
+  when: nginx_status.stat.exists
+
+- name: install certbot and generate cert
+  command: "{{ certbot_script }} certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} -d {{ ssl_cert_domain }}"
+  args:
+    creates: "{{ certbot_output_dir }}"
+
+- name: ensure Nginx is started
+  service: name=nginx state=started
+  when: nginx_status.stat.exists
+
+- name: ensure a cron job to auto-renew the cert exists
+  cron: name="monthy auto renew cert"
+        special_time=monthly
+        job="{{ certbot_script }} renew --standalone --no-self-upgrade --pre-hook \"service nginx stop\" --post-hook \"service nginx start\" --quiet"
+        state=present
+  when: certbot_auto_renew

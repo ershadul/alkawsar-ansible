@@ -1,0 +1,8 @@
+---
+certbot_auto_renew: yes
+certbot_admin_email: <your-email-address>
+certbot_script: certbot
+certbot_output_dir: "/etc/letsencrypt/live"
+ssl_cert_domain: "www.alkawsar.com"
+letsencrypt_cert_filename: fullchain.pem
+letsencrypt_privkey_filename: privkey.pem

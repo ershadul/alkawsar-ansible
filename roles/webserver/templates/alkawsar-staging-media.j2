@@ -1,0 +1,23 @@
+server {
+    listen      80;
+    server_name media-staging.alkawsar.com;
+    charset     utf-8;
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    client_max_body_size 75M;   # adjust to taste
+
+    root {{ app_path }}/media;
+
+    location /media  {
+        alias {{ app_path }}/media;      # your Django project's media files
+        fastcgi_hide_header Set-Cookie;
+        add_header Cache-Control public;
+        access_log off;
+        expires 1h;
+    }
+
+    location / {
+        deny all;
+    }
+}

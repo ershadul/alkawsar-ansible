@@ -1,0 +1,5 @@
+---
+- hosts: production_redis
+  become: yes
+  roles:
+    - { role: redis, tags: redis }

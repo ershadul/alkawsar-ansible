@@ -1,0 +1,9 @@
+---
+- hosts: shishu_prod
+  become: yes
+  roles:
+    - { role: users, tags: users }
+    - { role: common, tags: common }
+    - { role: application, tags: application }
+    - { role: certbot, tags: 'certbot' }
+    - { role: webserver, tags: webserver }

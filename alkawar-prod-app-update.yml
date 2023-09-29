@@ -1,0 +1,32 @@
+---
+- hosts: production
+  become: yes
+  tasks:
+    - name: git clone/checkout
+      git:
+        repo: "{{ git_repo }}"
+        dest: "{{ app_path }}"
+        version: "{{ git_branch }}"
+        accept_hostkey: yes
+      become: yes
+      tags: git
+    - name: pip install -r requirements
+      pip:
+        requirements: "{{ app_path }}/requirements-3.8.txt"
+        virtualenv: "{{ virtualenv_path }}"
+        virtualenv_python: "{{ virtualenv_python }}"
+      tags: pip
+    - name: ./manage.py migrate
+      django_manage:
+        command: migrate
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ virtualenv_path }}"
+      tags: ["django", "migrate"]
+    - name: django collectstatic
+      django_manage:
+        command: collectstatic
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ virtualenv_path }}"
+      tags: ["django", "collectstatic"]
+    - name: reload systemctl
+      systemd: name={{app_name}}-gunicorn.service state=restarted daemon_reload=yes enabled=yes

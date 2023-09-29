@@ -1,0 +1,17 @@
+---
+env: nari-prod
+app_name: nari-prod
+git_branch: master
+db_user: "*****"
+db_password: "*****"
+db_name: nari_v1
+db_host: localhost
+ansible_user: ubuntu
+python_version: python3
+virtualenv_python: python3
+ansible_python_interpreter: /usr/bin/python3
+virtualenv_path:  "/home/{{ system_user }}/env-{{ env }}"
+ansible_ssh_private_key_file: ~/.ssh/aws-lightsail-ap-southeast-1.pem
+ssl_cert_domain: nari.alkawsar.com
+certbot_output_dir: "/etc/letsencrypt/live/nari.alkawsar.com"
+gunicorn_workers: 4

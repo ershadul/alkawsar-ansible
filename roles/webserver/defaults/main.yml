@@ -1,0 +1,4 @@
+---
+# Log files
+nginx_access_log_file: "/var/log/nginx/{{ app_name }}_access.log"
+nginx_error_log_file: "/var/log/nginx/{{ app_name }}_error.log"

@@ -1,0 +1,89 @@
+---
+- name: git clone/checkout
+  git:
+    repo: "{{ git_repo }}"
+    dest: "{{ app_path }}"
+    version: "{{ git_branch }}"
+    accept_hostkey: yes
+  become: yes
+  tags: git
+
+- name: ensure necessary directories exist
+  file:
+    path: "/var/log/{{ app_name }}"
+    state: directory
+
+- name: ensure .django_cache directory exists
+  file:
+    path: "/home/{{ system_user }}/.{{ app_name }}"
+    state: directory
+    mode: 0755
+
+- name: create symlink to log directory
+  file:
+    src: "/var/log/{{ app_name }}"
+    dest: "{{ app_path }}/logs"
+    state: link
+
+- name: install pip
+  apt: name={{ python_version }}-pip state=present
+  tags: pip
+
+- name: install virtualenv
+  pip: name=virtualenv executable=pip3
+  tags: pip
+
+- name: pip upgrade
+  command: pip3 install --upgrade pip
+  tags: pip
+
+- name: pip install -r requirements
+  pip:
+    requirements: "{{ app_path }}/requirements-3.8.txt"
+    virtualenv: "{{ virtualenv_path }}"
+    virtualenv_python: "{{ virtualenv_python }}"
+  tags: pip
+
+- name: copy local.py
+  template:
+    src: "local.{{ env }}.py.j2"
+    dest: "{{ app_path }}/alkawsarcms/local.py"
+  tags: ["django", "local_settings"]
+  when:
+    - env is defined
+
+- name: ./manage.py migrate
+  django_manage:
+    command: migrate
+    app_path: "{{ app_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+  tags: ["django", "migrate"]
+
+# - name: ./manage.py update_translation_fields
+#   django_manage:
+#     command: update_translation_fields
+#     app_path: "{{ app_path }}"
+#     virtualenv: "{{ virtualenv_path }}"
+#   tags: ["django", "update_translation_fields"]
+
+# - name: ./manage.py cms fix-tree
+#   django_manage:
+#     command: cms fix-tree
+#     app_path: "{{ app_path }}"
+#     virtualenv: "{{ virtualenv_path }}"
+#   tags: ["cms-command"]
+
+- name: django collectstatic
+  django_manage:
+    command: collectstatic
+    app_path: "{{ app_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+  tags: ["django", "collectstatic"]
+
+# - name: ./manage.py update_index
+#   django_manage:
+#     command: update_index
+#     app_path: "{{ app_path }}"
+#     virtualenv: "{{ virtualenv_path }}"
+#   tags: ["update_index"]
+#   when: update_index is defined

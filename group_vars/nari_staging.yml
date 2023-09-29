@@ -1,0 +1,18 @@
+env: nari-staging
+db_user: dbanari
+db_password: "*****"
+db_name: nari_v1
+app_name: nari-staging
+python_version: python3
+virtualenv_python: python3
+git_repo: git@github.com:ershadul/alkawsarcms.git
+git_branch: staging
+virtualenv_path:  "/home/{{ system_user }}/env-{{ env }}"
+app_path: "/home/{{ system_user }}/{{ app_name }}"
+django_manage_path: "{{ app_path }}"
+wsgi_module: alkawsarcms.wsgi:application
+ssl_cert_domain: nari-staging.alkawsar.com
+certbot_output_dir: "/etc/letsencrypt/live"
+ansible_user: ubuntu
+ansible_python_interpreter: /usr/bin/python3
+ansible_ssh_private_key_file: ~/.ssh/alkawsar-staging.cer

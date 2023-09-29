@@ -1,0 +1,10 @@
+[Unit]
+Description={{ app_name }}
+After=network.target
+
+[Service]
+WorkingDirectory={{ django_manage_path }}
+ExecStart={{ virtualenv_path }}/bin/gunicorn --access-logfile /home/{{ system_user }}/{{ app_name }}-gunicorn-access.log --error-logfile /home/{{ system_user }}/{{ app_name }}-gunicorn-error.log --workers {{ gunicorn_workers }} --bind unix:/tmp/{{ app_name }}-gunicorn.sock {{ wsgi_module }}
+
+[Install]
+WantedBy=multi-user.target

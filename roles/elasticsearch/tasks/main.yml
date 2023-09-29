@@ -1,0 +1,11 @@
+- name: Install java
+  apt: package={{ item }} state=present update_cache=yes
+  with_items:
+    - openjdk-8-jre
+    - openjdk-8-jdk
+
+- name: Install ElasticSearch
+  apt: deb="https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.5/elasticsearch-2.3.5.deb"
+
+- name: Ensure ElasticSearch is enabled and running
+  systemd: name=elasticsearch state=restarted daemon_reload=yes enabled=yes

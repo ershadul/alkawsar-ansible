@@ -1,0 +1,30 @@
+---
+# gunicorn
+- name: copy gunicorn.service
+  template:
+    src: gunicorn.service.j2
+    dest: /etc/systemd/system/{{app_name}}-gunicorn.service
+  tags: gunicorn
+
+- name: reload systemctl
+  systemd: name={{app_name}}-gunicorn.service state=restarted daemon_reload=yes enabled=yes
+
+# nginx
+- name: install nginx
+  apt: name=nginx state=present
+
+- name: create nginx configuration file
+  template: src={{ app_name }}.j2
+            dest=/etc/nginx/sites-available/{{ app_name }}
+            backup=yes
+  notify: restart nginx
+
+- name: disable default site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: enable application site
+  file: src=/etc/nginx/sites-available/{{ app_name }}
+        dest=/etc/nginx/sites-enabled/{{ app_name }}
+        state=link
+  notify: restart nginx
+

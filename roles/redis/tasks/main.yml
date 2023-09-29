@@ -1,0 +1,41 @@
+---
+- name: build-essential
+  apt:
+    name: build-essential
+    state: present
+    update_cache: yes
+
+- name: download latest stable redis
+  get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
+
+- name: untar redis
+  unarchive: src=/tmp/redis-stable.tar.gz dest=/tmp copy=no
+
+- name: build redis
+  shell: cd /tmp/redis-stable && make && make install
+
+- name: make sure that /etc/redis exists
+  file: path=/etc/redis state=directory mode=0755
+
+- name: make sure that /var/redis exists
+  file: path=/var/redis state=directory mode=0755
+
+- name: make sure that /var/redis/6379 exists
+  file: path=/var/redis/6379 state=directory mode=0755
+
+- name: redis conf
+  template:
+    src: 6379.conf
+    dest: /etc/redis/6379.conf
+
+- name: redis init.d
+  template:
+    src: redis_6379
+    dest: /etc/init.d/redis_6379
+    mode: 755
+
+- name: redis update-rd
+  command: update-rc.d redis_6379 defaults
+
+- name: restart redis
+  service: name=redis_6379 state=restarted

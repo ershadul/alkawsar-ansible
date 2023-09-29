@@ -1,0 +1,11 @@
+---
+- hosts: shishu_staging
+  become: yes
+  roles:
+    - { role: users, tags: users }
+    - { role: common, tags: common }
+    - { role: database, tags: database }
+    - { role: elasticsearch, tags: elasticsearch }
+    - { role: application, tags: application }
+    - { role: certbot, tags: 'certbot' }
+    - { role: webserver, tags: webserver }
